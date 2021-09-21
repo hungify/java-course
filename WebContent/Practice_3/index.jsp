@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link href="./assets/css/style.css" rel="stylesheet" type="text/css">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
@@ -18,11 +18,12 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
 	rel="stylesheet">
-<title>Lesson 1</title>
+<link href="./assets/css/style.css" rel="stylesheet" type="text/css">
+<title>Practice 3</title>
 </head>
 
 <body>
-	<div class="wrapper__direct">
+	<div class="d-flex justify-content-around mx-auto my-5">
 		<a href="maytinh.jsp" target="_blank" class="button">Máy tính </a> <a
 			href="xoso.jsp" target="_blank" class="button">Xổ số</a> <a
 			href="bcc.jsp" target="_blank" class="button">Bảng cửu chương</a>
