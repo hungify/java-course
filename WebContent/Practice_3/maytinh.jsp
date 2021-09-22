@@ -22,13 +22,13 @@
 				<form action="maytinh.jsp" method="POST">
 					<div class="form-group">
 						<label for="exampleInputPassword1">Số thứ nhất</label> <input
-							name="soThuNhat" type="number" required value="<%=soThuNhat%>"
+							name="soThuNhat" type="number" required value="<%=soThuNhat == null ? "" : soThuNhat%>"
 							class="form-control">
 					</div>
 
 					<div class="form-group">
 						<label for="exampleInputPassword1">Số thứ hai</label> <input
-							name="soThuHai" type="number" required value="<%=soThuHai%>"
+							name="soThuHai" type="number" required value="<%=soThuHai == null ? "" : soThuHai %>"
 							class="form-control">
 					</div>
 

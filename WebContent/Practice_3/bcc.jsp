@@ -13,6 +13,7 @@
 <body>
 	<%
 	String input = request.getParameter("numberInput");
+	out.print(input);
 	%>
 	<div class="conatainer mt-5">
 		<div class="row">
@@ -20,7 +21,7 @@
 				<form action="bcc.jsp" method="POST">
 					<div class="form-group">
 						<label for="exampleInputPassword1">Bảng cửu chương</label> <input
-							name="numberInput" type="number" required value="<%=input%>"
+							name="numberInput" type="number" required value="<%=input == null ? "" : input%>"
 							min="2" max="9" class="form-control">
 					</div>
 					<div class="text-center">
