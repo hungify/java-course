@@ -12,12 +12,14 @@ public class SinhVienBo {
 	return svdao.getSinhVien();
     }
 
-    public ArrayList<SinhVienBean> Tim(String makhoa) {
+    public ArrayList<SinhVienBean> Tim(String maKhoa) {
 	ArrayList<SinhVienBean> ds = svdao.getSinhVien();
 	ArrayList<SinhVienBean> tam = new ArrayList<SinhVienBean>();
-	for (SinhVienBean sv : ds) {
-	    if (sv.getMaKhoa().equals(makhoa))
-		tam.add(sv);
+	if (maKhoa != "" && maKhoa != null) {
+	    for (SinhVienBean sv : ds) {
+		if (sv.getMaKhoa().equals(maKhoa))
+		    tam.add(sv);
+	    }
 	}
 	return tam;
     }
@@ -25,10 +27,12 @@ public class SinhVienBo {
     public ArrayList<SinhVienBean> TimChung(String key) {
 	ArrayList<SinhVienBean> ds = svdao.getSinhVien();
 	ArrayList<SinhVienBean> tam = new ArrayList<SinhVienBean>();
-	for (SinhVienBean sv : ds) {
-	    if (sv.getHoTen().toLowerCase().trim().contains(key.toLowerCase().trim())
-		    || sv.getDiaChi().toLowerCase().trim().contains(key.toLowerCase().trim()))
-		tam.add(sv);
+	if (key != "" && key != null) {
+	    for (SinhVienBean sv : ds) {
+		if (sv.getHoTen().toLowerCase().trim().contains(key.toLowerCase().trim())
+			|| sv.getDiaChi().toLowerCase().trim().contains(key.toLowerCase().trim()))
+		    tam.add(sv);
+	    }
 	}
 	return tam;
     }

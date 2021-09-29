@@ -21,12 +21,19 @@
 
 
 	<%
+	request.setCharacterEncoding("UTF-8");
 	KhoaBo kbo = new KhoaBo();
 	SinhVienBo svbo = new SinhVienBo();
 	ArrayList<SinhVienBean> dssv = svbo.getSinhVien();
-
-	String maKhoa = request.getParameter("maKhoa");
-	ArrayList<SinhVienBean> dssvMaKhoa = svbo.Tim(maKhoa);
+	String inputAll = null;
+	
+	if (request.getParameter("inputAll") != null) {
+	    inputAll = request.getParameter("inputAll");
+	}
+	
+	String mk = request.getParameter("mk");
+	if(mk != null) dssv = svbo.Tim(mk);
+	ArrayList<SinhVienBean> dssvThongtin = svbo.TimChung(inputAll);
 	%>
 	<div class="container">
 
@@ -46,19 +53,33 @@
  }
  %>
 					<div>
+
 						<form method="POST" action="htKhoa.jsp">
+							<button type="submit" class="btn btn-primary my-2" name="tatcasv">Lấy
+								tất cả sinh viên</button>
 							<div class="form-group">
-								<label for="exampleInputPassword1">Tìm kiếm Sinh Viên</label> <input
-									type="text" class="form-control" id="exampleInputPassword1"
-									placeholder="Nhập vào mã khoa" name="maKhoa">
+								<label for="exampleInputPassword1"> <%
+									 if (inputAll != null && inputAll != "") {
+									 %> Kết quả tìm cho  <%=inputAll%> <%
+									 } else {
+									 %> Tìm kiếm Sinh Viên <%
+									 }
+									 %>
+								</label> <input type="text" class="form-control"
+									placeholder="Nhập vào đây" name="inputAll" value="">
+							</div>
+							<div class="form-group mt-4">
+
+								<button type="submit" class="btn btn-success" name="thongtinsv" placeholder="Nhập vào thông tin sinh viên">Tìm
+									kiếm</button>
+
 							</div>
 
-							<button type="submit" class="btn btn-primary">Tìm</button>
 						</form>
 					</div>
 				</td>
 				<td valign="top" width="600">
-					<table class="table">
+					<table class="table text-center">
 						<thead>
 							<tr>
 								<th scope="col">Mã sinh viên</th>
@@ -69,12 +90,10 @@
 							</tr>
 						</thead>
 
-
 						<%
-						if (maKhoa != null && dssvMaKhoa.size() > 0) {
-						    for (SinhVienBean sv : dssvMaKhoa) {
+					
+						    for (SinhVienBean sv : dssv) {
 						%>
-
 						<tr>
 							<td><%=sv.getMaSV()%></td>
 							<td><%=sv.getHoTen()%></td>
@@ -82,12 +101,13 @@
 							<td><%=sv.getDtb()%></td>
 							<td><%=sv.getMaKhoa()%></td>
 						</tr>
+
 						<%
+						
 						}
+						if (dssvThongtin.size() > 0 && request.getParameter("thongtinsv") != null) {
 
-						} else {
-
-						for (SinhVienBean sv : dssv) {
+						for (SinhVienBean sv : dssvThongtin) {
 						%>
 
 						<tr>
