@@ -6,14 +6,14 @@ import bean.KhoaBean;
 import dao.KhoaDao;
 
 public class KhoaBo {
-    KhoaDao kdo = new KhoaDao();
+    KhoaDao kdao = new KhoaDao();
 
     public ArrayList<KhoaBean> getKhoa() {
-	return kdo.getKhoa();
+	return kdao.getKhoa();
     }
 
     public ArrayList<KhoaBean> searchByName(String name) {
-	var dsk = kdo.getKhoa();
+	var dsk = kdao.getKhoa();
 	ArrayList<KhoaBean> result = new ArrayList<KhoaBean>();
 	
 	for (KhoaBean k : dsk) {
