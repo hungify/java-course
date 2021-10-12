@@ -1,11 +1,13 @@
+<%@page import="jdk.javadoc.internal.doclets.formats.html.markup.Script"%>
+<%@page import="bean.GioHangBean"%>
+<%@page import="bo.GioHangBo"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="bean.KhachHangBean"%>
 <%@page import="bo.KhachHangBo"%>
 <%@page import="bean.LoaiBean"%>
 <%@page import="bean.SachBean"%>
 <%@page import="bo.LoaiBo"%>
 <%@page import="bo.SachBo"%>
-
-<%@page import="java.util.ArrayList"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -16,6 +18,7 @@
 <!-- Style css -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="./css/style.css">
 
 
 <title>Insert title here</title>
@@ -35,16 +38,64 @@
 	String ml = request.getParameter("ml");
 	String key = request.getParameter("txttk");
 	if (ml != null)
-		ds = sbo.timMaLoai(ml);
+	    ds = sbo.timMaLoai(ml);
 	else if (key != null)
-		ds = sbo.timChung(key);
+	    ds = sbo.timChung(key);
 
 	//Login
 	String tk = request.getParameter("txtUser");
 	String mk = request.getParameter("txtPass");
 
 	KhachHangBo khbo = new KhachHangBo();
+
+	String maSach = request.getParameter("ms");
+	String tenSach = request.getParameter("ts");
+	String tacGia = request.getParameter("tg");
+	String gia = request.getParameter("gia");
+	String anh = request.getParameter("anh");
+	Long giaBan = 0L;
+
+	//Xoá
+	String msxoa = request.getParameter("delms");
+	//Cập nhật
+	String upsl = request.getParameter("upsl");
+	String upms = request.getParameter("upms");
+
+	if (gia != null)
+	    giaBan = Long.parseLong(gia);
+
+	if (maSach != null && giaBan != null && anh != null) {
+
+	    GioHangBo ghbo = new GioHangBo();
+
+	    if (session.getAttribute("giohang") == null) {
+		session.setAttribute("giohang", ghbo);
+	    }
+
+	    ghbo = (GioHangBo) session.getAttribute("giohang");
+
+	    ghbo.Them(maSach, tenSach, tacGia, anh, giaBan, 1);
+	    //Luu bien vao session
+	    session.setAttribute("giohang", ghbo);
+	}
+
+	if (msxoa != null) {
+	    GioHangBo ghbo = new GioHangBo();
+	    ghbo = (GioHangBo) session.getAttribute("giohang");
+	    ghbo.Xoa(msxoa);
+	    session.setAttribute("giohang", ghbo);
+	}
+
+	if (upsl != null && upms != null && request.getParameter("up") != null) {
+	    int sl = Integer.parseInt(upsl);
+	    GioHangBo ghbo = new GioHangBo();
+	    ghbo = (GioHangBo) session.getAttribute("giohang");
+	    ghbo.Sua(upms, sl);
+	    session.setAttribute("giohang", ghbo);
+	}
 	%>
+
+
 
 
 	<div class="container-fuild">
@@ -59,8 +110,8 @@
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active"><a class="nav-link"
-						href="giohang.jsp">Giỏ hàng <span class="sr-only">(current)</span>
+					<li class="nav-item active"><a class="nav-link" href="#">Giỏ
+							hàng <span class="sr-only">(current)</span>
 					</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Thanh
 							Toán</a></li>
@@ -84,23 +135,6 @@
 								xuất</button></li>
 					</form>
 					<%
-					} else {
-					%>
-
-					<li class="nav-item active"><a
-						class="btn btn-sm btn-outline-secondary nav-link"
-						data-target="#myModal" data-toggle="modal">Đăng nhập</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Đăng ký</a></li>
-					<%
-					if (session.getAttribute("sskt") != null) {
-						if ((long) session.getAttribute("sskt") == 1) {
-					%>
-					<script>
-						alert('Thông tin tài khoản mật khẩu không chính xác');
-					</script>
-					<%
-					}
-					}
 					}
 					%>
 
@@ -120,7 +154,7 @@
 
 					<!-- Modal body -->
 					<div class="modal-body p-3 pt-0">
-						<form action="ktdn.jsp" method="POST">
+						<form action="menu.jsp" method="POST">
 							<div class="row mb-3">
 								<label for="date" class="col-sm-3 col-form-label">User
 									name</label>
@@ -140,7 +174,7 @@
 
 
 							<button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary"
-								type="submit" name="btn-login">Đăng nhập</button>
+								type="submit" name="btn-login">Sign up</button>
 
 						</form>
 					</div>
@@ -199,46 +233,62 @@
 				<td width="700">
 					<table class="table">
 						<tr>
-							<h4>
-								Có
-								<%=ml != null ? sbo.demSach(ml) : ds.size()%>
-								cuốn sách
-							</h4>
-							<td>
-							<td>
-								<div class="container">
-									<div class="row">
-										<%
-										int n = ds.size();
+							<h4>Giỏ hàng của bạn</h4>
 
-										for (int i = 0; i < n; i++) {
-										    SachBean s = ds.get(i);
-										%>
-										<div class="col-4 my-3">
-											<a
-												href="giohang.jsp?ms=<%=s.getMaSach()%>&ts=<%=s.getTenSach()%>&tg=<%=s.getTacGia()%>&gia=<%=s.getGia()%>&anh=<%=s.getAnh()%>">><img
-												src="image_sach/<%=s.getAnh()%>"></a>
-											<div class="">
-												<p><%=s.getTenSach()%></p>
-												<p>
-													<%=s.getTacGia()%>
-												</p>
-												<p><%=s.getGia()%>
-													đ
-												</p>
-												<a
-													href="giohang.jsp?ms=<%=s.getMaSach()%>&ts=<%=s.getTenSach()%>&tg=<%=s.getTacGia()%>&gia=<%=s.getGia()%>&anh=<%=s.getAnh()%>">
-													<img src="mua.jpg">
-												</a>
-											</div>
-										</div>
-										<%
-										}
-										%>
-									</div>
-								</div>
+							<%
+							if (session.getAttribute("giohang") != null) {
+							    GioHangBo ghbo = new GioHangBo();
+							    ghbo = (GioHangBo) session.getAttribute("giohang");
+							    int size = ghbo.ds.size();
+
+							    for (int i = 0; i < size; i++) {
+								GioHangBean g = ghbo.ds.get(i);
+							%>
+							<td valign="top" class="text-center"><img
+								src="image_sach/<%=g.getAnh()%>" class="img-thumbnail w-100"></td>
+							<td>
+								<p class="d-inline"><%=g.getTenSach()%>
+									-
+								<p class="d-inline"><%=g.getTacGia()%>
+								<p>
+									Giá bán:
+									<%=g.getGia()%>
+									đ x
+								<form action="giohang.jsp?upms=<%=g.getMaSach()%>">
+									<input type="number" class="width-50"
+										value="<%=g.getSoLuong()%>" name="upsl" /> <input
+										type="hidden" class="width-50" value="<%=g.getMaSach()%>"
+										name="upms" /> <input type="submit" value="Cập nhật"
+										name="up">
+								</form> <a href="giohang.jsp?delms=<%=g.getMaSach()%>">Xoá khỏi giỏ
+									hàng</a>
+								</p>
 							</td>
 						</tr>
+						<%
+						}
+						%>
+						<tr>
+							<td valign="top" width="180px" height="50px"><p>
+									Tổng cộng:
+									<%=ghbo.tongTien()%>
+									đ
+								</p></td>
+
+						</tr>
+						<%
+						} else {
+						%>
+						<div class="row mt-5">
+							<div class="col text-center mt-5">
+								<h3  class="text-muted mb-5">Giỏ hàng trống</h3>
+								<a href="menu.jsp">Mua sắm ngay</a>
+							</div>
+							
+						</div>
+						<%
+						}
+						%>
 					</table>
 
 				</td>
