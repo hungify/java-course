@@ -15,14 +15,12 @@ public class GioHangBo {
 
     public void Them(String maSach, String tenSach, String tacGia, String anh, Long giaBan, int soLuong) {
 	int n = ds.size();
-	for (int i = 0; i < n; i++) {
-	    if (ds.get(i).getTenSach().toLowerCase().trim().equals(tenSach.toLowerCase().trim())) {
-		int slt = ds.get(i).getSoLuong() + soLuong;
-		ds.get(i).setSoLuong(slt);
-		long thanhTien = slt * giaBan;
-		ds.get(i).setThanhTien(thanhTien);
+	for (GioHangBean g : ds) {
+	    if(g.getTenSach().toLowerCase().trim().equals(tenSach.toLowerCase().trim())) {
+		g.setSoLuong(g.getSoLuong() + soLuong);
 		return;
 	    }
+	
 	}
 	GioHangBean h = new GioHangBean(maSach, tenSach, tacGia, anh, giaBan, soLuong);
 	ds.add(h);
@@ -30,10 +28,11 @@ public class GioHangBo {
     }
 
     public void Xoa(String masach) {
-	for (int i = 0; i < ds.size(); i++) {
-	    if (masach.equals(ds.get(i).getMaSach()))
-		ds.remove(i);
-	}
+	for (GioHangBean g : ds)
+	    if (g.getMaSach().equals(masach)) {
+		ds.remove(g);
+		return;
+	    }
     }
 
     public long tongTien() {

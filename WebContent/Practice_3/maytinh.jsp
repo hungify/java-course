@@ -12,106 +12,48 @@
 </head>
 <body>
 	<%
-	String soThuNhat = request.getParameter("soThuNhat");
-	String soThuHai = request.getParameter("soThuHai");
+	request.setCharacterEncoding("UTF-8");
+	response.setCharacterEncoding("UTF-8");
 	%>
 
+	<%=session.getAttribute("alo")%>
+	<%
+	//String[] ds = (String[]) request.getAttribute("ds");
+	
+	//for (String t : ds)
+	//    out.print(t + "<hr>");
+	
+	long kq = (long) 0;
+	String nSoThuNhat = (String)request.getAttribute("SoThuNhat");
+	String nSoThuHai = (String)request.getAttribute("SoThuHai");
+	if (request.getAttribute("kq") != null)
+	    kq = (long) request.getAttribute("kq");
+		
+	%>
+	
 	<div class="container mt-5">
 		<div class="row">
 			<div class="col-4 mx-auto my-0">
-				<form action="maytinh.jsp" method="POST">
+				<form action="hello" method="POST">
 					<div class="form-group">
 						<label for="exampleInputPassword1">Số thứ nhất</label> <input
-							name="soThuNhat" type="number" required value="<%=soThuNhat == null ? "" : soThuNhat%>"
+							name="soThuNhat" type="number" value="<%=nSoThuNhat == null ? "" : nSoThuNhat%>"
+							required "
 							class="form-control">
 					</div>
 
 					<div class="form-group">
 						<label for="exampleInputPassword1">Số thứ hai</label> <input
-							name="soThuHai" type="number" required value="<%=soThuHai == null ? "" : soThuHai %>"
-							class="form-control">
+							name="soThuHai" type="number" required class="form-control"
+							value="<%=nSoThuHai == null ? "" : nSoThuHai%>"
+							>
 					</div>
-
-
-					<%
-					if (soThuNhat != null && soThuHai != null) {
-						long nSoThuNhat = Long.parseLong(soThuNhat);
-						long nSoThuHai = Long.parseLong(soThuHai);
-					%>
 
 					<div>
-						<p>
-							Số thứ nhất:
-							<%=nSoThuNhat%></p>
-						<p>
-							Số thứ nhất:
-							<%=nSoThuHai%></p>
+						
+							</p><p><%=kq%>
+
 					</div>
-
-
-					<%
-					Long kq = (long) 0;
-
-					if (request.getParameter("cong") != null) {
-						kq = nSoThuNhat + nSoThuHai;
-					%>
-					<p>
-						Kết quả:
-						<%=nSoThuNhat%>
-						+
-						<%=nSoThuHai%>
-						=
-						<%=kq%></p>
-
-					<%
-					} else if (request.getParameter("tru") != null) {
-					kq = nSoThuNhat - nSoThuHai;
-					%>
-					<p>
-						Kết quả:
-						<%=nSoThuNhat%>
-						-
-						<%=nSoThuHai%>
-						=
-						<%=kq%></p>
-
-					<%
-					} else if (request.getParameter("nhan") != null) {
-					kq = nSoThuNhat * nSoThuHai;
-					%>
-					<p>
-						Kết quả:
-						<%=nSoThuNhat%>
-						*
-						<%=nSoThuHai%>
-						=
-						<%=kq%></p>
-
-					<%
-					} else {
-					if (nSoThuHai == 0) {
-					%>
-					<p class="text-danger">Không thể thực hiện phép chia với số 0</p>
-
-					<%
-					} else {
-
-					double kqChia = (double) nSoThuNhat / nSoThuHai;
-					%>
-					<p>
-						Kết quả:
-						<%=nSoThuNhat%>
-						/
-						<%=nSoThuHai%>
-						=
-						<%=kqChia%></p>
-					<%
-					}
-					}
-					}
-					%>
-
-
 
 					<div class="form-group mt-4">
 						<button type="submit" class="btn btn-primary" name="cong"

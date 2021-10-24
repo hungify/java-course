@@ -1,4 +1,3 @@
-<%@page import="jdk.javadoc.internal.doclets.formats.html.markup.Script"%>
 <%@page import="bean.GioHangBean"%>
 <%@page import="bo.GioHangBo"%>
 <%@page import="java.util.ArrayList"%>
@@ -35,25 +34,6 @@
 	LoaiBo lbo = new LoaiBo();
 	ArrayList<SachBean> ds = sbo.getSach();
 
-	String ml = request.getParameter("ml");
-	String key = request.getParameter("txttk");
-	if (ml != null)
-	    ds = sbo.timMaLoai(ml);
-	else if (key != null)
-	    ds = sbo.timChung(key);
-
-	//Login
-	String tk = request.getParameter("txtUser");
-	String mk = request.getParameter("txtPass");
-
-	KhachHangBo khbo = new KhachHangBo();
-
-	String maSach = request.getParameter("ms");
-	String tenSach = request.getParameter("ts");
-	String tacGia = request.getParameter("tg");
-	String gia = request.getParameter("gia");
-	String anh = request.getParameter("anh");
-	Long giaBan = 0L;
 
 	//Xoá
 	String msxoa = request.getParameter("delms");
@@ -61,38 +41,11 @@
 	String upsl = request.getParameter("upsl");
 	String upms = request.getParameter("upms");
 
-	if (gia != null)
-	    giaBan = Long.parseLong(gia);
+	ArrayList<SachBean> dssach = (ArrayList<SachBean>) request.getAttribute("dssach");
+	ArrayList<LoaiBean> dsloai = (ArrayList<LoaiBean>) request.getAttribute("dsloai");
+	
+	String key = (String) request.getAttribute("timkiemsach");
 
-	if (maSach != null && giaBan != null && anh != null) {
-
-	    GioHangBo ghbo = new GioHangBo();
-
-	    if (session.getAttribute("giohang") == null) {
-		session.setAttribute("giohang", ghbo);
-	    }
-
-	    ghbo = (GioHangBo) session.getAttribute("giohang");
-
-	    ghbo.Them(maSach, tenSach, tacGia, anh, giaBan, 1);
-	    //Luu bien vao session
-	    session.setAttribute("giohang", ghbo);
-	}
-
-	if (msxoa != null) {
-	    GioHangBo ghbo = new GioHangBo();
-	    ghbo = (GioHangBo) session.getAttribute("giohang");
-	    ghbo.Xoa(msxoa);
-	    session.setAttribute("giohang", ghbo);
-	}
-
-	if (upsl != null && upms != null && request.getParameter("up") != null) {
-	    int sl = Integer.parseInt(upsl);
-	    GioHangBo ghbo = new GioHangBo();
-	    ghbo = (GioHangBo) session.getAttribute("giohang");
-	    ghbo.Sua(upms, sl);
-	    session.setAttribute("giohang", ghbo);
-	}
 	%>
 
 
@@ -100,7 +53,7 @@
 
 	<div class="container-fuild">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="menu.jsp">Trang chủ</a>
+			<a class="navbar-brand" href="home">Trang chủ</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -110,19 +63,19 @@
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">Giỏ
+					<li class="nav-item active"><a class="nav-link" href="cart">Giỏ
 							hàng <span class="sr-only">(current)</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Thanh
+					<li class="nav-item"><a class="nav-link" href="payment">Thanh
 							Toán</a></li>
 
-					<li class="nav-item"><a class="nav-link" href="#">Lịch sử
+					<li class="nav-item"><a class="nav-link" href="purchasehistory">Lịch sử
 							mua hàng</a></li>
 				</ul>
 
 				<ul class="navbar-nav ml-auto mr-2">
 					<%
-					KhachHangBean kh = (KhachHangBean) session.getAttribute("sskh");
+					KhachHangBean kh = (KhachHangBean) session.getAttribute("auth");
 
 					if (kh != null) {
 					%>
@@ -131,7 +84,7 @@
 					</a></li>
 					<form action="ktdn.jsp" method="POST">
 						<li class="nav-item"><button
-								class="nav-link btn btn-sm btn-outline-secondary" href="#">Đăng
+								class="nav-link btn btn-sm btn-outline-secondary" href="signin?logout=true">Đăng
 								xuất</button></li>
 					</form>
 					<%
@@ -154,7 +107,7 @@
 
 					<!-- Modal body -->
 					<div class="modal-body p-3 pt-0">
-						<form action="menu.jsp" method="POST">
+						<form action="signin" method="POST">
 							<div class="row mb-3">
 								<label for="date" class="col-sm-3 col-form-label">User
 									name</label>
@@ -197,14 +150,14 @@
 						for (LoaiBean loai : lbo.getLoai()) {
 						%>
 						<tr>
-							<td><a href="menu.jsp?ml=<%=loai.getMaLoai()%>"> <%=loai.getTenLoai()%>
+							<td><a href="home?ml=<%=loai.getMaLoai()%>"> <%=loai.getTenLoai()%>
 							</a></td>
 						</tr>
 						<%
 						}
 						%>
 						<td>
-							<form action="menu.jsp" method="GET">
+							<form action="home" method="GET">
 								<div class="form-group">
 									<label for="exampleInputPassword1"> <%
  if (key != null) {
@@ -218,12 +171,12 @@
  }
  %>
 									</label> <input type="text" class="form-control"
-										placeholder="Nhập thông tin cần tìm" name="txttk">
+										placeholder="Tìm kiếm" name="txttk">
 								</div>
 								<div class="form-group mt-4">
 
-									<button type="submit" class="btn btn-success" name="thongtinsv"
-										placeholder="Nhập vào thông tin sinh viên">Tìm kiếm</button>
+									<button type="submit" class="btn btn-success"
+										>Tìm kiếm</button>
 
 								</div>
 							</form>
@@ -238,7 +191,9 @@
 							<%
 							if (session.getAttribute("giohang") != null) {
 							    GioHangBo ghbo = new GioHangBo();
+							    
 							    ghbo = (GioHangBo) session.getAttribute("giohang");
+							    
 							    int size = ghbo.ds.size();
 
 							    for (int i = 0; i < size; i++) {
@@ -252,15 +207,17 @@
 								<p class="d-inline"><%=g.getTacGia()%>
 								<p>
 									Giá bán:
-									<%=g.getGia()%>
-									đ x
-								<form action="giohang.jsp?upms=<%=g.getMaSach()%>">
+									<%= g.getGia() %>
+									đ x 
+									<%= g.getSoLuong() %>
+								<form action="cart?upms=<%=g.getMaSach()%>">
 									<input type="number" class="width-50"
-										value="<%=g.getSoLuong()%>" name="upsl" /> <input
+										value="<%=g.getSoLuong()%>" name="upsl" min="1" /> <input
 										type="hidden" class="width-50" value="<%=g.getMaSach()%>"
+										
 										name="upms" /> <input type="submit" value="Cập nhật"
 										name="up">
-								</form> <a href="giohang.jsp?delms=<%=g.getMaSach()%>">Xoá khỏi giỏ
+								</form> <a href="cart?delms=<%=g.getMaSach()%>">Xoá khỏi giỏ
 									hàng</a>
 								</p>
 							</td>
@@ -282,7 +239,7 @@
 						<div class="row mt-5">
 							<div class="col text-center mt-5">
 								<h3  class="text-muted mb-5">Giỏ hàng trống</h3>
-								<a href="menu.jsp">Mua sắm ngay</a>
+								<a href="home">Mua sắm ngay</a>
 							</div>
 							
 						</div>

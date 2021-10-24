@@ -15,6 +15,8 @@ public class SachBo {
     }
 
     public ArrayList<SachBean> timMaLoai(String maLoai) {
+	
+	System.out.print(maLoai);
 	ArrayList<SachBean> ds = sdao.getSach();
 	ArrayList<SachBean> tam = new ArrayList<SachBean>();
 	for (SachBean sv : ds) {

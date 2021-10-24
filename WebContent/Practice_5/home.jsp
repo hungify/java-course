@@ -1,9 +1,6 @@
 <%@page import="bean.KhachHangBean"%>
-<%@page import="bo.KhachHangBo"%>
 <%@page import="bean.LoaiBean"%>
 <%@page import="bean.SachBean"%>
-<%@page import="bo.LoaiBo"%>
-<%@page import="bo.SachBo"%>
 
 <%@page import="java.util.ArrayList"%>
 
@@ -28,28 +25,16 @@
 	<%
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
-	SachBo sbo = new SachBo();
-	LoaiBo lbo = new LoaiBo();
-	ArrayList<SachBean> ds = sbo.getSach();
 
-	String ml = request.getParameter("ml");
-	String key = request.getParameter("txttk");
-	if (ml != null)
-		ds = sbo.timMaLoai(ml);
-	else if (key != null)
-		ds = sbo.timChung(key);
-
-	//Login
-	String tk = request.getParameter("txtUser");
-	String mk = request.getParameter("txtPass");
-
-	KhachHangBo khbo = new KhachHangBo();
+	ArrayList<SachBean> dssach = (ArrayList<SachBean>) request.getAttribute("dssach");
+	ArrayList<LoaiBean> dsloai = (ArrayList<LoaiBean>) request.getAttribute("dsloai");
+	String key = (String) request.getAttribute("timkiemsach");
 	%>
 
 
 	<div class="container-fuild">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="menu.jsp">Trang chủ</a>
+			<a class="navbar-brand" href="home">Trang chủ</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -59,51 +44,55 @@
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active"><a class="nav-link"
-						href="giohang.jsp">Giỏ hàng <span class="sr-only">(current)</span>
+					<li class="nav-item active"><a class="nav-link" href="cart">Giỏ
+							hàng <span class="sr-only">(current)</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Thanh
+					<li class="nav-item"><a class="nav-link" href="payment">Thanh
 							Toán</a></li>
 
-					<li class="nav-item"><a class="nav-link" href="#">Lịch sử
-							mua hàng</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="purchasehistory">Lịch sử mua hàng</a></li>
 				</ul>
 
 				<ul class="navbar-nav ml-auto mr-2">
 					<%
-					KhachHangBean kh = (KhachHangBean) session.getAttribute("sskh");
+					KhachHangBean kh = (KhachHangBean) session.getAttribute("auth");
+					int flagAuth;
 
 					if (kh != null) {
 					%>
-					<li class="nav-item"><a class="nav-link" href="#">Chào
+					<li class="nav-item"><a class="nav-link" href="profile">Chào
 							mừng <%=kh.getHoTen()%>
 					</a></li>
-					<form action="ktdn.jsp" method="POST">
+					<form action="signin?logout=<%=true%>" method="POST">
 						<li class="nav-item"><button
-								class="nav-link btn btn-sm btn-outline-secondary" href="#">Đăng
-								xuất</button></li>
+								class="nav-link btn btn-sm btn-outline-secondary"
+								href="signin">Đăng xuất</button></li>
 					</form>
 					<%
 					} else {
-					%>
+					if (session.getAttribute("flag_auth") == null) {
+						flagAuth = 0;
+					} else {
+						flagAuth = (int) session.getAttribute("flag_auth");
+					}
 
-					<li class="nav-item active"><a
-						class="btn btn-sm btn-outline-secondary nav-link"
-						data-target="#myModal" data-toggle="modal">Đăng nhập</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Đăng ký</a></li>
-					<%
-					if (session.getAttribute("sskt") != null) {
-						if ((long) session.getAttribute("sskt") == 1) {
+					if (flagAuth == 1) {
 					%>
 					<script>
 						alert('Thông tin tài khoản mật khẩu không chính xác');
 					</script>
 					<%
 					}
-					}
+					%>
+					<li class="nav-item active"><a
+						class="btn btn-sm btn-outline-secondary nav-link"
+						data-target="#myModal" data-toggle="modal">Đăng nhập</a></li>
+					<li class="nav-item"><a class="nav-link" href="signup">Đăng
+							ký</a></li>
+					<%
 					}
 					%>
-
 				</ul>
 			</div>
 		</nav>
@@ -120,7 +109,7 @@
 
 					<!-- Modal body -->
 					<div class="modal-body p-3 pt-0">
-						<form action="ktdn.jsp" method="POST">
+						<form action="signin" method="POST">
 							<div class="row mb-3">
 								<label for="date" class="col-sm-3 col-form-label">User
 									name</label>
@@ -160,17 +149,18 @@
 				<td valign="top" width="100">
 					<table class="table">
 						<%
-						for (LoaiBean loai : lbo.getLoai()) {
+						for (LoaiBean loai : dsloai) {
 						%>
 						<tr>
-							<td><a href="menu.jsp?ml=<%=loai.getMaLoai()%>"> <%=loai.getTenLoai()%>
+							<td><a href="home?ml=<%=loai.getMaLoai()%>">
+									<%=loai.getTenLoai()%>
 							</a></td>
 						</tr>
 						<%
 						}
 						%>
 						<td>
-							<form action="menu.jsp" method="GET">
+							<form action="home" method="GET">
 								<div class="form-group">
 									<label for="exampleInputPassword1"> <%
  if (key != null) {
@@ -184,12 +174,11 @@
  }
  %>
 									</label> <input type="text" class="form-control"
-										placeholder="Nhập thông tin cần tìm" name="txttk">
+										placeholder="Tìm kiếm" name="txttk">
 								</div>
 								<div class="form-group mt-4">
-
-									<button type="submit" class="btn btn-success" name="thongtinsv"
-										placeholder="Nhập vào thông tin sinh viên">Tìm kiếm</button>
+									<button type="submit" class="btn btn-success"
+										>Tìm kiếm</button>
 
 								</div>
 							</form>
@@ -200,8 +189,11 @@
 					<table class="table">
 						<tr>
 							<h4>
+								<%
+								int n = dssach.size();
+								%>
 								Có
-								<%=ml != null ? sbo.demSach(ml) : ds.size()%>
+								<%=n%>
 								cuốn sách
 							</h4>
 							<td>
@@ -209,14 +201,13 @@
 								<div class="container">
 									<div class="row">
 										<%
-										int n = ds.size();
-
 										for (int i = 0; i < n; i++) {
-										    SachBean s = ds.get(i);
+										    SachBean s = dssach.get(i);
 										%>
 										<div class="col-4 my-3">
-											<a
-												href="giohang.jsp?ms=<%=s.getMaSach()%>&ts=<%=s.getTenSach()%>&tg=<%=s.getTacGia()%>&gia=<%=s.getGia()%>&anh=<%=s.getAnh()%>">><img
+											<a href="cart?ms= <%=s.getMaSach()%>&ts=<%=s.getTenSach()%>
+												&tg=<%=s.getTacGia()%> &gia=<%=s.getGia()%>
+												&anh=<%=s.getAnh()%>"> <img
 												src="image_sach/<%=s.getAnh()%>"></a>
 											<div class="">
 												<p><%=s.getTenSach()%></p>
@@ -227,8 +218,8 @@
 													đ
 												</p>
 												<a
-													href="giohang.jsp?ms=<%=s.getMaSach()%>&ts=<%=s.getTenSach()%>&tg=<%=s.getTacGia()%>&gia=<%=s.getGia()%>&anh=<%=s.getAnh()%>">
-													<img src="mua.jpg">
+													href="cart?ms=<%=s.getMaSach()%>&ts=<%=s.getTenSach()%>&tg=<%=s.getTacGia()%>&gia=<%=s.getGia()%>&anh=<%=s.getAnh()%>">
+													<img src="image_sach/mua.jpg">
 												</a>
 											</div>
 										</div>
