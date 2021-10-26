@@ -34,7 +34,6 @@
 	LoaiBo lbo = new LoaiBo();
 	ArrayList<SachBean> ds = sbo.getSach();
 
-
 	//Xoá
 	String msxoa = request.getParameter("delms");
 	//Cập nhật
@@ -43,9 +42,8 @@
 
 	ArrayList<SachBean> dssach = (ArrayList<SachBean>) request.getAttribute("dssach");
 	ArrayList<LoaiBean> dsloai = (ArrayList<LoaiBean>) request.getAttribute("dsloai");
-	
-	String key = (String) request.getAttribute("timkiemsach");
 
+	String key = (String) request.getAttribute("timkiemsach");
 	%>
 
 
@@ -69,28 +67,49 @@
 					<li class="nav-item"><a class="nav-link" href="payment">Thanh
 							Toán</a></li>
 
-					<li class="nav-item"><a class="nav-link" href="purchasehistory">Lịch sử
-							mua hàng</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="purchasehistory">Lịch sử mua hàng</a></li>
 				</ul>
-
+				
 				<ul class="navbar-nav ml-auto mr-2">
 					<%
 					KhachHangBean kh = (KhachHangBean) session.getAttribute("auth");
+					int flagAuth;
 
 					if (kh != null) {
 					%>
-					<li class="nav-item"><a class="nav-link" href="#">Chào
+					<li class="nav-item"><a class="nav-link" href="profile">Chào
 							mừng <%=kh.getHoTen()%>
 					</a></li>
-					<form action="ktdn.jsp" method="POST">
+					<form action="signin?logout=<%=true%>" method="POST">
 						<li class="nav-item"><button
-								class="nav-link btn btn-sm btn-outline-secondary" href="signin?logout=true">Đăng
+								class="nav-link btn btn-sm btn-outline-secondary" href="signin">Đăng
 								xuất</button></li>
 					</form>
 					<%
+					} else {
+					if (session.getAttribute("flag_auth") == null) {
+						flagAuth = 0;
+					} else {
+						flagAuth = (int) session.getAttribute("flag_auth");
+					}
+
+					if (flagAuth == 1) {
+					%>
+					<script>
+						alert('Thông tin tài khoản mật khẩu không chính xác');
+					</script>
+					<%
 					}
 					%>
-
+					<li class="nav-item active"><a
+						class="btn btn-sm btn-outline-secondary nav-link"
+						data-target="#myModal" data-toggle="modal">Đăng nhập</a></li>
+					<li class="nav-item"><a class="nav-link" href="signup">Đăng
+							ký</a></li>
+					<%
+					}
+					%>
 				</ul>
 			</div>
 		</nav>
@@ -170,13 +189,12 @@
  %> Tìm kiếm Sách <%
  }
  %>
-									</label> <input type="text" class="form-control"
-										placeholder="Tìm kiếm" name="txttk">
+									</label> <input type="text" class="form-control" placeholder="Tìm kiếm"
+										name="txttk">
 								</div>
 								<div class="form-group mt-4">
 
-									<button type="submit" class="btn btn-success"
-										>Tìm kiếm</button>
+									<button type="submit" class="btn btn-success">Tìm kiếm</button>
 
 								</div>
 							</form>
@@ -191,9 +209,9 @@
 							<%
 							if (session.getAttribute("giohang") != null) {
 							    GioHangBo ghbo = new GioHangBo();
-							    
+
 							    ghbo = (GioHangBo) session.getAttribute("giohang");
-							    
+
 							    int size = ghbo.ds.size();
 
 							    for (int i = 0; i < size; i++) {
@@ -207,18 +225,15 @@
 								<p class="d-inline"><%=g.getTacGia()%>
 								<p>
 									Giá bán:
-									<%= g.getGia() %>
-									đ x 
-									<%= g.getSoLuong() %>
-								<form action="cart?upms=<%=g.getMaSach()%>">
+									<%=g.getGia()%>
+									đ x
+									<%=g.getSoLuong()%>
+								<form action="cart">
 									<input type="number" class="width-50"
 										value="<%=g.getSoLuong()%>" name="upsl" min="1" /> <input
 										type="hidden" class="width-50" value="<%=g.getMaSach()%>"
-										
-										name="upms" /> <input type="submit" value="Cập nhật"
-										name="up">
-								</form> <a href="cart?delms=<%=g.getMaSach()%>">Xoá khỏi giỏ
-									hàng</a>
+										name="upms" /> <input type="submit" value="Cập nhật">
+								</form> <a href="cart?delms=<%=g.getMaSach()%>">Xoá khỏi giỏ hàng</a>
 								</p>
 							</td>
 						</tr>
@@ -238,10 +253,10 @@
 						%>
 						<div class="row mt-5">
 							<div class="col text-center mt-5">
-								<h3  class="text-muted mb-5">Giỏ hàng trống</h3>
+								<h3 class="text-muted mb-5">Giỏ hàng trống</h3>
 								<a href="home">Mua sắm ngay</a>
 							</div>
-							
+
 						</div>
 						<%
 						}

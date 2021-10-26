@@ -54,11 +54,12 @@ public class SignInController extends HttpServlet {
 	    } else {
 		//Sai mk or tk
 		session.setAttribute("flag_auth", 1);
-		session.setAttribute("auth", null);
+		session.setAttribute("auth", null);	
 	    }
 	} else {
 	    session.setAttribute("flag_auth", null);
 	    session.setAttribute("auth", null);
+	    session.setAttribute("giohang", null);
 	}
 
 	RequestDispatcher rd = request.getRequestDispatcher("home");

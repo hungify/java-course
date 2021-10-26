@@ -44,25 +44,12 @@ public class CartController extends HttpServlet {
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 	
-	SachBo sbo = new SachBo();
-	LoaiBo lbo = new LoaiBo();
-	
-	ArrayList<SachBean> dssach = sbo.getSach();
-	ArrayList<LoaiBean> dsloai = lbo.getLoai();
-	
-	String ml = request.getParameter("ml");
-	String key = request.getParameter("txttk");
-	
-	if (ml != null)
-	    dssach = sbo.timMaLoai(ml);
-	else if (key != null)
-	{
-	    dssach = sbo.timChung(key);
-	}
-
-
+	HttpSession session = request.getSession();
 	KhachHangBo khbo = new KhachHangBo();
+	
+	String order = request.getParameter("order");
 
+	
 	String maSach = request.getParameter("ms");
 	String tenSach = request.getParameter("ts");
 	String tacGia = request.getParameter("tg");
@@ -77,13 +64,9 @@ public class CartController extends HttpServlet {
 	String upsl = request.getParameter("upsl");
 	String upms = request.getParameter("upms");
 	
-	HttpSession session = request.getSession();
 
-	if (gia != null)
+	if (maSach != null && giaBan != null && anh != null && gia != null) {
 	    giaBan = Long.parseLong(gia);
-
-	if (maSach != null && giaBan != null && anh != null) {
-
 	    GioHangBo ghbo = new GioHangBo();
 
 	    if (session.getAttribute("giohang") == null) {
@@ -97,7 +80,7 @@ public class CartController extends HttpServlet {
 	    session.setAttribute("giohang", ghbo);
 	}
 
-	if (msxoa != null) {
+	else if (msxoa != null) {
 	    GioHangBo ghbo = new GioHangBo();
 	    ghbo = (GioHangBo) session.getAttribute("giohang");
 	    ghbo.Xoa(msxoa);
@@ -109,14 +92,26 @@ public class CartController extends HttpServlet {
 	    }
 	}
 
-	if (upsl != null && upms != null && request.getParameter("up") != null) {
+	else if (upsl != null && upms != null) {
 	    int sl = Integer.parseInt(upsl);
+	    
 	    GioHangBo ghbo = new GioHangBo();
 	    ghbo = (GioHangBo) session.getAttribute("giohang");
+
 	    ghbo.Sua(upms, sl);
+	    int size = ghbo.ds.size();
+	    
 	    session.setAttribute("giohang", ghbo);
+	    
+	    
+	    
 	}
 	
+	if(order != null) {
+	    RequestDispatcher rd = request.getRequestDispatcher("home");
+	    rd.forward(request, response);
+	    return;
+	}
 	
 	RequestDispatcher rd = request.getRequestDispatcher("Practice_5/cart.jsp");
 	rd.forward(request, response);

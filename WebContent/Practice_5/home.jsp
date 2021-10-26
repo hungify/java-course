@@ -1,3 +1,4 @@
+<%@page import="bo.GioHangBo"%>
 <%@page import="bean.KhachHangBean"%>
 <%@page import="bean.LoaiBean"%>
 <%@page import="bean.SachBean"%>
@@ -28,6 +29,15 @@
 
 	ArrayList<SachBean> dssach = (ArrayList<SachBean>) request.getAttribute("dssach");
 	ArrayList<LoaiBean> dsloai = (ArrayList<LoaiBean>) request.getAttribute("dsloai");
+	int size = 0;
+	if (session.getAttribute("giohang") != null) {
+		GioHangBo ghbo = new GioHangBo();
+
+		ghbo = (GioHangBo) session.getAttribute("giohang");
+
+		size = ghbo.ds.size();
+	}
+
 	String key = (String) request.getAttribute("timkiemsach");
 	%>
 
@@ -45,7 +55,8 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active"><a class="nav-link" href="cart">Giỏ
-							hàng <span class="sr-only">(current)</span>
+							hàng <span class="badge badge-light rounded-circle"><%=size %></span> <span
+							class="sr-only">unread messages</span>
 					</a></li>
 					<li class="nav-item"><a class="nav-link" href="payment">Thanh
 							Toán</a></li>
@@ -66,8 +77,8 @@
 					</a></li>
 					<form action="signin?logout=<%=true%>" method="POST">
 						<li class="nav-item"><button
-								class="nav-link btn btn-sm btn-outline-secondary"
-								href="signin">Đăng xuất</button></li>
+								class="nav-link btn btn-sm btn-outline-secondary" href="signin">Đăng
+								xuất</button></li>
 					</form>
 					<%
 					} else {
@@ -152,8 +163,7 @@
 						for (LoaiBean loai : dsloai) {
 						%>
 						<tr>
-							<td><a href="home?ml=<%=loai.getMaLoai()%>">
-									<%=loai.getTenLoai()%>
+							<td><a href="home?ml=<%=loai.getMaLoai()%>"> <%=loai.getTenLoai()%>
 							</a></td>
 						</tr>
 						<%
@@ -173,12 +183,11 @@
  %> Tìm kiếm Sách <%
  }
  %>
-									</label> <input type="text" class="form-control"
-										placeholder="Tìm kiếm" name="txttk">
+									</label> <input type="text" class="form-control" placeholder="Tìm kiếm"
+										name="txttk">
 								</div>
 								<div class="form-group mt-4">
-									<button type="submit" class="btn btn-success"
-										>Tìm kiếm</button>
+									<button type="submit" class="btn btn-success">Tìm kiếm</button>
 
 								</div>
 							</form>
@@ -205,10 +214,12 @@
 										    SachBean s = dssach.get(i);
 										%>
 										<div class="col-4 my-3">
-											<a href="cart?ms= <%=s.getMaSach()%>&ts=<%=s.getTenSach()%>
+											<a
+												href="cart?order=<%=true%>&ms= <%=s.getMaSach()%>&ts=<%=s.getTenSach()%>
 												&tg=<%=s.getTacGia()%> &gia=<%=s.getGia()%>
-												&anh=<%=s.getAnh()%>"> <img
-												src="image_sach/<%=s.getAnh()%>"></a>
+												&anh=<%=s.getAnh()%>">
+												<img src="image_sach/<%=s.getAnh()%>">
+											</a>
 											<div class="">
 												<p><%=s.getTenSach()%></p>
 												<p>
@@ -218,7 +229,7 @@
 													đ
 												</p>
 												<a
-													href="cart?ms=<%=s.getMaSach()%>&ts=<%=s.getTenSach()%>&tg=<%=s.getTacGia()%>&gia=<%=s.getGia()%>&anh=<%=s.getAnh()%>">
+													href="cart?order=<%=true%>&ms=<%=s.getMaSach()%>&ts=<%=s.getTenSach()%>&tg=<%=s.getTacGia()%>&gia=<%=s.getGia()%>&anh=<%=s.getAnh()%>">
 													<img src="image_sach/mua.jpg">
 												</a>
 											</div>
