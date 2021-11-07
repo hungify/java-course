@@ -1,4 +1,7 @@
-﻿-------------------------------------------------------------------------------
+﻿use QLSach
+go
+
+-------------------------------------------------------------------------------
 --  proc_KhachHang_Register: Đăng ký một tài khoản khách hàng mới
 -------------------------------------------------------------------------------
 
@@ -52,15 +55,15 @@ end
 go
 
 -- Test thủ tục: proc_KhachHang_Register
-declare @makh int 
-exec  proc_KhachHang_Register		
-@hoten = 'a',
-@tendn = 'kh2',
-@pass = '123',
-@diachi = '32 a',
-@email = 'a@gmail.com',
-@sodt = '09302',
-@makh = @makh output
+--declare @makh int 
+--exec  proc_KhachHang_Register		
+--@hoten = 'a',
+--@tendn = 'kh2',
+--@pass = '123',
+--@diachi = '32 a',
+--@email = 'a@gmail.com',
+--@sodt = '09302',
+--@makh = @makh output
 
 -------------------------------------------------------------------------------
 --  proc_KhachHang_Authenticate: Kiểm tra đang nhập
@@ -81,10 +84,9 @@ end
 go
 
 -- Test thủ tục: proc_KhachHang_Authenticate
-
-exec  proc_KhachHang_Authenticate
-		@tendn = 'kh1',
-		@pass = 123
+--exec  proc_KhachHang_Authenticate
+--		@tendn = 'kh1',
+--		@pass = 123
 		
 
 -------------------------------------------------------------------------------
@@ -113,12 +115,12 @@ end
 go
 
 -- Test thủ tục: proc_HoaDon_Create
-declare @maHoaDon bigint;
-exec  proc_HoaDon_Create
-		@maKh = 52,
-		@ngayMua = '2021-02-02',
-		@daMua = 1,
-		@maHoaDon = @maHoaDon output
+--declare @maHoaDon bigint;
+--exec  proc_HoaDon_Create
+--		@maKh = 52,
+--		@ngayMua = '2021-02-02',
+--		@daMua = 1,
+--		@maHoaDon = @maHoaDon output
 
 -------------------------------------------------------------------------------
 --  proc_ChiTietHoaDon_Create: Tạo mới chi tiết hoá đơn
@@ -151,12 +153,12 @@ end
 go
 
 -- Test thủ tục: proc_ChiTietHoaDon_Create
-declare @StatusCode int;
-exec  proc_ChiTietHoaDon_Create
-		@maSach = '99',
-		@soLuong = 99,
-		@maHoaDon = 15,
-		@StatusCode = @StatusCode output
+--declare @StatusCode int;
+--exec  proc_ChiTietHoaDon_Create
+--		@maSach = '99',
+--		@soLuong = 99,
+--		@maHoaDon = 15,
+--		@StatusCode = @StatusCode output
 
 -------------------------------------------------------------------------------
 --  proc_HoaDon_OrderHistory: Lấy lịch sử đặt hàng
@@ -179,6 +181,6 @@ begin
 end
 go
 
-exec proc_HoaDon_OrderHistory
-@customerId = 23
+--exec proc_HoaDon_OrderHistory
+--@customerId = 23
 
