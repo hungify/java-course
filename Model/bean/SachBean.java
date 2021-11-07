@@ -1,60 +1,77 @@
 package bean;
 
 public class SachBean {
-    private String maSach;
-    private String tenSach;
-    private String tacGia;
+    private String masach;
+    private String tensach;
+    private String tacgia;
     private Long gia;
     private String anh;
-    private String maLoai;
+    private String maloai;
     
-    public String getMaSach() {
-        return maSach;
+    public SachBean(String masach, String tensach, String tacgia, Long gia, String anh, String maloai) {
+   	super();
+   	this.masach = masach;
+   	this.maloai = maloai;
+   	this.tensach = tensach;
+   	this.tacgia = tacgia;
+   	this.gia = gia;
+   	this.anh = anh;
+   	
+       }
+    
+    public SachBean() {
+   	super();
+   	
+       }
+
+    public String getMasach() {
+        return masach;
     }
-    public SachBean(String maSach, String tenSach, String tacGia, Long gia, String anh, String maLoai) {
-	super();
-	this.maSach = maSach;
-	this.tenSach = tenSach;
-	this.tacGia = tacGia;
-	this.gia = gia;
-	this.anh = anh;
-	this.maLoai = maLoai;
+
+    public void setMasach(String masach) {
+        this.masach = masach;
     }
-    public void setMaSach(String maSach) {
-        this.maSach = maSach;
+
+    public String getTensach() {
+        return tensach;
     }
-    public String getTenSach() {
-        return tenSach;
+
+    public void setTensach(String tensach) {
+        this.tensach = tensach;
     }
-    public void setTenSach(String tenSach) {
-        this.tenSach = tenSach;
+
+    public String getTacgia() {
+        return tacgia;
     }
-    public String getTacGia() {
-        return tacGia;
+
+    public void setTacgia(String tacgia) {
+        this.tacgia = tacgia;
     }
-    public void setTacGia(String tacGia) {
-        this.tacGia = tacGia;
-    }
+
     public Long getGia() {
         return gia;
     }
+
     public void setGia(Long gia) {
         this.gia = gia;
     }
-    public String getMaLoai() {
-        return maLoai;
-    }
-    public void setMaLoai(String maLoai) {
-        this.maLoai = maLoai;
-    }
+
     public String getAnh() {
         return anh;
     }
+
     public void setAnh(String anh) {
         this.anh = anh;
     }
 
-  
+    public String getMaLoai() {
+        return maloai;
+    }
+
+    public void setMaLoai(String maloai) {
+        this.maloai = maloai;
+    }
+      
 }	
 
 

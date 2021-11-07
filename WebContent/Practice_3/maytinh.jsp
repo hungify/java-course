@@ -34,7 +34,7 @@
 	<div class="container mt-5">
 		<div class="row">
 			<div class="col-4 mx-auto my-0">
-				<form action="hello" method="POST">
+				<form action="ketqua.jsp" method="POST">
 					<div class="form-group">
 						<label for="exampleInputPassword1">Số thứ nhất</label> <input
 							name="soThuNhat" type="number" value="<%=nSoThuNhat == null ? "" : nSoThuNhat%>"

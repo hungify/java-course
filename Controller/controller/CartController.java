@@ -41,80 +41,81 @@ public class CartController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
-	request.setCharacterEncoding("UTF-8");
-	response.setCharacterEncoding("UTF-8");
-	
-	HttpSession session = request.getSession();
-	KhachHangBo khbo = new KhachHangBo();
-	
-	String order = request.getParameter("order");
+	try {
+	    request.setCharacterEncoding("UTF-8");
+	    response.setCharacterEncoding("UTF-8");
 
-	
-	String maSach = request.getParameter("ms");
-	String tenSach = request.getParameter("ts");
-	String tacGia = request.getParameter("tg");
-	String gia = request.getParameter("gia");
-	String anh = request.getParameter("anh");
-	Long giaBan = 0L;
+	    HttpSession session = request.getSession();
+	    LoaiBo lbo = new LoaiBo();
+	    ArrayList<LoaiBean> dsloai = lbo.getLoai();
 
-	//Xoá
-	String msxoa = request.getParameter("delms");
-	
-	//Cập nhật
-	String upsl = request.getParameter("upsl");
-	String upms = request.getParameter("upms");
-	
+	    String order = request.getParameter("order");
 
-	if (maSach != null && giaBan != null && anh != null && gia != null) {
-	    giaBan = Long.parseLong(gia);
-	    GioHangBo ghbo = new GioHangBo();
+	    String maSach = request.getParameter("ms");
+	    String tenSach = request.getParameter("ts");
+	    String tacGia = request.getParameter("tg");
+	    String gia = request.getParameter("gia");
+	    String anh = request.getParameter("anh");
+	    Long giaBan = 0L;
 
-	    if (session.getAttribute("giohang") == null) {
+	    // Xoá
+	    String msxoa = request.getParameter("delms");
+
+	    // Cập nhật
+	    String upsl = request.getParameter("upsl");
+	    String upms = request.getParameter("upms");
+
+	    if (maSach != null && giaBan != null && gia != null) {
+		giaBan = Long.parseLong(gia);
+		GioHangBo ghbo = new GioHangBo();
+
+		if (session.getAttribute("giohang") == null) {
+		    session.setAttribute("giohang", ghbo);
+		}
+
+		ghbo = (GioHangBo) session.getAttribute("giohang");
+		ghbo.Them(maSach, tenSach, tacGia, anh, giaBan, 1);
 		session.setAttribute("giohang", ghbo);
 	    }
 
-	    ghbo = (GioHangBo) session.getAttribute("giohang");
+	    else if (msxoa != null) {
+		GioHangBo ghbo = new GioHangBo();
+		ghbo = (GioHangBo) session.getAttribute("giohang");
+		ghbo.Xoa(msxoa);
+		if (ghbo.ds.size() == 0) {
+		    session.setAttribute("giohang", null);
+		} else {
+		    session.setAttribute("giohang", ghbo);
+		}
+	    }
 
-	    ghbo.Them(maSach, tenSach, tacGia, anh, giaBan, 1);
+	    else if (upsl != null && upms != null) {
+		int sl = Integer.parseInt(upsl);
 
-	    session.setAttribute("giohang", ghbo);
-	}
+		GioHangBo ghbo = new GioHangBo();
+		ghbo = (GioHangBo) session.getAttribute("giohang");
 
-	else if (msxoa != null) {
-	    GioHangBo ghbo = new GioHangBo();
-	    ghbo = (GioHangBo) session.getAttribute("giohang");
-	    ghbo.Xoa(msxoa);
-	    if(ghbo.ds.size() == 0)
-	    {
+		ghbo.Sua(upms, sl);
+		session.setAttribute("giohang", ghbo);
+	    }
+	    if (order != null) {
+		RequestDispatcher rd = request.getRequestDispatcher("home");
+		rd.forward(request, response);
+		return;
+	    }
+
+	    if (request.getAttribute("paidSuccess") != null) {
 		session.setAttribute("giohang", null);
-	    } else {		
-		session.setAttribute("giohang", ghbo);
+		request.setAttribute("paidSuccess", true);
 	    }
-	}
 
-	else if (upsl != null && upms != null) {
-	    int sl = Integer.parseInt(upsl);
-	    
-	    GioHangBo ghbo = new GioHangBo();
-	    ghbo = (GioHangBo) session.getAttribute("giohang");
-
-	    ghbo.Sua(upms, sl);
-	    int size = ghbo.ds.size();
-	    
-	    session.setAttribute("giohang", ghbo);
-	    
-	    
-	    
-	}
-	
-	if(order != null) {
-	    RequestDispatcher rd = request.getRequestDispatcher("home");
+	    request.setAttribute("dsloai", dsloai);
+	    RequestDispatcher rd = request.getRequestDispatcher("views/cart.jsp");
 	    rd.forward(request, response);
-	    return;
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
-	
-	RequestDispatcher rd = request.getRequestDispatcher("Practice_5/cart.jsp");
-	rd.forward(request, response);
+
     }
 
     /**

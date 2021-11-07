@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import bean.LoaiBean;
 
-import dao.LoaiSachDao;
+import dao.LoaiDao;
 
 public class LoaiBo {
-    LoaiSachDao sdao = new LoaiSachDao();
+    LoaiDao sdao = new LoaiDao();
 
-    public ArrayList<LoaiBean> getLoai() {
+    public ArrayList<LoaiBean> getLoai() throws Exception {
 	return sdao.getLoaiSach();
     }
 }

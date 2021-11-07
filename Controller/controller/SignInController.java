@@ -35,35 +35,46 @@ public class SignInController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
-	request.setCharacterEncoding("UTF-8");
-	response.setCharacterEncoding("UTF-8");
+	try {
+	    request.setCharacterEncoding("UTF-8");
+	    response.setCharacterEncoding("UTF-8");
 
-	String tk = request.getParameter("txtUser");
-	String mk = request.getParameter("txtPass");
-	String logout = request.getParameter("logout");
-	
+	    String username = request.getParameter("username");
+	    String password = request.getParameter("password");
+	    String logout = request.getParameter("logout");
+	    
 
-	HttpSession session = request.getSession();
-	if (logout == null) {
-	    KhachHangBo khbo = new KhachHangBo();
-	    KhachHangBean kh = khbo.kiemTraDN(tk, mk);
-	    if (kh != null) {// thông tin tài khoản chính xác
-		if (session.getAttribute("auth") == null) {
-		    session.setAttribute("auth", (KhachHangBean) kh);
+
+	    HttpSession session = request.getSession();
+	    if (logout == null) {
+		KhachHangBean kh = new KhachHangBean();
+		KhachHangBo khbo = new KhachHangBo();
+		
+		String usernameLowerCase = username.toLowerCase();
+		
+		kh = khbo.kiemTraDN(usernameLowerCase, password);
+
+		if (kh != null) {// thông tin tài khoản chính xác
+		    if (session.getAttribute("auth") == null) {
+			session.setAttribute("auth", (KhachHangBean) kh);
+		    }
+		} else {
+		    // Sai mk or tk
+		    session.setAttribute("flag_auth", 1);
+		    session.setAttribute("auth", null);
 		}
 	    } else {
-		//Sai mk or tk
-		session.setAttribute("flag_auth", 1);
-		session.setAttribute("auth", null);	
+		session.setAttribute("flag_auth", null);
+		session.setAttribute("auth", null);
+		session.setAttribute("giohang", null);
 	    }
-	} else {
-	    session.setAttribute("flag_auth", null);
-	    session.setAttribute("auth", null);
-	    session.setAttribute("giohang", null);
+	    
+	    
+	    RequestDispatcher rd = request.getRequestDispatcher("home");
+	    rd.forward(request, response);
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
-
-	RequestDispatcher rd = request.getRequestDispatcher("home");
-	rd.forward(request, response);
     }
 
     /**
@@ -77,4 +88,3 @@ public class SignInController extends HttpServlet {
     }
 
 }
-

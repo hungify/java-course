@@ -1,24 +1,26 @@
 package bean;
 
 public class LoaiBean {
-    private String maLoai;
-    private String tenLoai;
-    public String getMaLoai() {
-        return maLoai;
+    private String maloai;
+    private String tenloai;
+    
+  
+    public String getMaloai() {
+        return maloai;
     }
-    public void setMaLoai(String maLoai) {
-        this.maLoai = maLoai;
+    public void setMaloai(String maloai) {
+        this.maloai = maloai;
     }
-    public String getTenLoai() {
-        return tenLoai;
+    public String getTenloai() {
+        return tenloai;
     }
-    public void setTenLoai(String tenLoai) {
-        this.tenLoai = tenLoai;
+    public void setTenloai(String tenloai) {
+        this.tenloai = tenloai;
     }
-    public LoaiBean(String maLoai, String tenLoai) {
+    public LoaiBean(String maloai, String tenloai) {
 	super();
-	this.maLoai = maLoai;
-	this.tenLoai = tenLoai;
+	this.maloai = maloai;
+	this.tenloai = tenloai;
     }
     public LoaiBean() {
 	super();

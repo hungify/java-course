@@ -3,45 +3,40 @@ package bo;
 import java.util.ArrayList;
 
 import bean.SachBean;
-import bean.SinhVienBean;
 import dao.SachDao;
-import dao.SinhVienDao;
 
 public class SachBo {
     SachDao sdao = new SachDao();
 
-    public ArrayList<SachBean> getSach() {
+    public ArrayList<SachBean> getSach() throws Exception {
 	return sdao.getSach();
     }
 
-    public ArrayList<SachBean> timMaLoai(String maLoai) {
+    public ArrayList<SachBean> timMaLoai(String maLoai) throws Exception {
 	
-	System.out.print(maLoai);
 	ArrayList<SachBean> ds = sdao.getSach();
 	ArrayList<SachBean> tam = new ArrayList<SachBean>();
-	for (SachBean sv : ds) {
-	    System.out.println(sv);
-	    if (sv.getMaLoai().equals(maLoai))
-		tam.add(sv);
+	for (SachBean sb : ds) {
+	    if (sb.getMaLoai().equals(maLoai))
+		tam.add(sb);
 	}
-
 	return tam;
     }
 
-    public ArrayList<SachBean> timChung(String key) {
+    public ArrayList<SachBean> timChung(String key) throws Exception {
 	ArrayList<SachBean> ds = sdao.getSach();
 	ArrayList<SachBean> tam = new ArrayList<SachBean>();
 	if (key != "" && key != null) {
 	    for (SachBean sv : ds) {
-		if (sv.getTenSach().toLowerCase().trim().contains(key.toLowerCase().trim())
-			|| sv.getTacGia().toLowerCase().trim().contains(key.toLowerCase().trim()))
+		if (sv.getMasach().toLowerCase().trim().contains(key.toLowerCase().trim())
+			|| sv.getTacgia().toLowerCase().trim().contains(key.toLowerCase().trim()))
 		    tam.add(sv);
 	    }
 	}
 	return tam;
     }
 
-    public Long demSach(String maloai) {
+    public Long demSach(String maloai) throws Exception {
 	long dem = 0;
 	ArrayList<SachBean> sbean = sdao.getSach();
 	int n = sbean.size();

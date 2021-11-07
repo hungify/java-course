@@ -36,37 +36,37 @@ public class HomeController extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	request.setCharacterEncoding("UTF-8");
-	response.setCharacterEncoding("UTF-8");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+	try {
+	    request.setCharacterEncoding("UTF-8");
+	    response.setCharacterEncoding("UTF-8");
 
-	SachBo sbo = new SachBo();
-	LoaiBo lbo = new LoaiBo();
-	
-	ArrayList<SachBean> dssach = sbo.getSach();
-	ArrayList<LoaiBean> dsloai = lbo.getLoai();
+	    SachBo sbo = new SachBo();
+	    LoaiBo lbo = new LoaiBo();
 
-	String ml = request.getParameter("ml");
-	String key = request.getParameter("txttk");
-	
-	
-	 
-	if (ml != null)
-	    dssach = sbo.timMaLoai(ml);
-	else if (key != null)
-	{
-	    dssach = sbo.timChung(key);
+	    ArrayList<SachBean> dssach = sbo.getSach();
+	    ArrayList<LoaiBean> dsloai = lbo.getLoai();
+
+	    String ml = request.getParameter("ml");
+	    String key = request.getParameter("txttk");
+
+	    if (ml != null)
+		dssach = sbo.timMaLoai(ml);
+	    else if (key != null) {
+		dssach = sbo.timChung(key);
+	    }
+
+	    request.setAttribute("dsloai", dsloai);
+	    request.setAttribute("dssach", dssach);
+	    request.setAttribute("timkiemsach", key);
+
+	    RequestDispatcher rd = request.getRequestDispatcher("views/home.jsp");
+	    rd.forward(request, response);
+
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
 
-	request.setAttribute("dsloai", dsloai);
-	request.setAttribute("dssach", dssach);
-	request.setAttribute("timkiemsach", key);
-	
-	RequestDispatcher rd = request.getRequestDispatcher("Practice_5/home.jsp");
-	rd.forward(request, response);
-	
-	
     }
 
     /**

@@ -1,16 +1,19 @@
 package bean;
 
 public class KhachHangBean {
-    private String maKH;
+    private int maKH;
     private String hoTen;
+    private String tenDangNhap;
     private String diaChi;
     private String matKhau;
+    private String soDienThoai;
+    private String email;
 
-    public String getMaKH() {
+    public int getMaKH() {
 	return maKH;
     }
 
-    public void setMaKH(String maKH) {
+    public void setMaKH(int maKH) {
 	this.maKH = maKH;
     }
 
@@ -20,6 +23,14 @@ public class KhachHangBean {
 
     public void setHoTen(String hoTen) {
 	this.hoTen = hoTen;
+    }
+
+    public String getTenDangNhap() {
+	return tenDangNhap;
+    }
+
+    public void setTenDangNhap(String tenDangNhap) {
+	this.tenDangNhap = tenDangNhap;
     }
 
     public String getDiaChi() {
@@ -38,18 +49,46 @@ public class KhachHangBean {
 	this.matKhau = matKhau;
     }
 
-    public KhachHangBean(String maKH, String hoTen, String diaChi, String matKhau) {
+    public String getSoDienThoai() {
+	return soDienThoai;
+    }
+
+    public void setSoDienThoai(String soDienThoai) {
+	this.soDienThoai = soDienThoai;
+    }
+
+    public String getEmail() {
+	return email;
+    }
+
+    public void setEmail(String email) {
+	this.email = email;
+    }
+
+    public KhachHangBean(String fullname, String address, String username, String email, String phoneNumber,
+	    String password) {
 	super();
-	this.maKH = maKH;
-	this.hoTen = hoTen;
-	this.diaChi = diaChi;
-	this.matKhau = matKhau;
+	// TODO Auto-generated constructor stub
+	this.hoTen = fullname;
+	this.diaChi = address;
+	this.matKhau = password;
+	this.email = email;
+	this.soDienThoai = phoneNumber;
+	this.tenDangNhap = username;
+    }
+
+    public KhachHangBean(String fullname, String address, String username, String email, String phoneNumber) {
+	super();
+	// TODO Auto-generated constructor stub
+	this.hoTen = fullname;
+	this.diaChi = address;
+	this.email = email;
+	this.soDienThoai = phoneNumber;
+	this.tenDangNhap = username;
     }
 
     public KhachHangBean() {
-	super();
 	// TODO Auto-generated constructor stub
     }
 
-   
 }
